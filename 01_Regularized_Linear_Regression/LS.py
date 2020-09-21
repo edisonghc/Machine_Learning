@@ -14,8 +14,8 @@ parser.add_argument('-lr', default=0.01) #learning rate
 parser.add_argument('-maxiters', default=1000) #max iterations allowed
 parser.add_argument('-tol', default=1E-8) #stop if update smaller than tolerance
 
-#default = ['-Atrain_data2.txt','-ytrain_target2.txt']
-args = parser.parse_args() #(default)
+default = ['-Atrain_data2.txt','-ytrain_target2.txt']
+args = parser.parse_args(default) #(default)
 
 #store user specified arguments into variables
 train_file = str(args.A)
@@ -57,3 +57,4 @@ np.savetxt(output, weight, delimiter=' ') #save final weight vector to output pa
 #visualizing the update process, see if converges
 plt.plot(history)
 plt.plot([0, len(history)],[0,0])
+plt.show()
