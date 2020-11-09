@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
+import argparse
+parser = argparse.ArgumentParser() #initialize argument parser
+
 
 
 class Activation:
@@ -760,24 +763,37 @@ def one_hot_encoding(label_vector):
     
     return binary_rep
 
-
-
 file_num = 3
 
+# Parse arguments from the command line
+parser.add_argument('-A', default=f'train_data{file_num}.txt') 
+parser.add_argument('-y', default=f'train_target{file_num}.txt') 
+parser.add_argument('-ln', default=3) 
+parser.add_argument('-un', '--list', type=str, default='5,3,1')
+parser.add_argument('-a', default='tanh') #'tanh' 'sigmoid'
+parser.add_argument('-ls', default='SSE') #'CE' 'SSE'
+parser.add_argument('-out', default=f'output{file_num}.txt')
+parser.add_argument('-lr', default=0.05)
+parser.add_argument('-nepochs', default=5E3)
+parser.add_argument('-bs', default=20)
+parser.add_argument('-tol', default=1E-4)
+
+args = parser.parse_args()
+
 # Training data file paths
-feature_file = f'train_data{file_num}.txt'
-target_file = f'train_target{file_num}.txt'
+feature_file = str(args.A)
+target_file = str(args.y)
 
 # User specified arguments
-layer_num = 3
-units = [5,3,1]
-activation = 'tanh' #'tanh' 'sigmoid'
-loss = 'SSE' #'CE' 'SSE'
-learn_rate = 0.05
-max_epochs = 5E3
-batch_size = 20
-tolerance = 1E-4
-output_file = f'output{file_num}.txt'
+layer_num = int(args.ln)
+units = [int(n_neuron) for n_neuron in args.list.split(',')]
+activation = str(args.a)
+loss = str(args.ls)
+learn_rate = float(args.lr)
+max_epochs = int(args.nepochs)
+batch_size = int(args.bs)
+tolerance = float(args.tol)
+output_file = str(args.out)
 
 # Model parameters for future use
 momentum = 0 #0.1
@@ -791,9 +807,9 @@ target = target[:, np.newaxis]
 if loss == 'CE':
     target = one_hot_encoding(target)
 
-# Check the dimension of the training feature and target
-print(feature.shape)
-print(target.shape)
+# # Check the dimension of the training feature and target
+# print(feature.shape)
+# print(target.shape)
 
 
 
@@ -801,7 +817,8 @@ print(target.shape)
 periodic_output = 2E2
 plt.rcParams['figure.figsize'] = (16,6)
 
-
+print(f"--- Start training ---")
+print(f'{"Epoch":>6}  {"Loss":}')
 
 # Construct the neural network
 model = Multilayers(feature.shape[1], 
@@ -826,21 +843,21 @@ while min_batch_error > tolerance and i < max_epochs:
     history = np.append(history, error)
     
     if i % periodic_output == 0:
-        print(i, min_batch_error)
+        print(f'{i:6}  {min_batch_error:.8f}')
 
     i += 1
 
 # Save the improvement in loss through time to a output file
 np.savetxt(output_file, history, delimiter=' ')
 
+print(f'{i:6}  {min_batch_error:.8f}')
 print(f"--- {(time.time() - start_time):.6f}s seconds ---")
-print(i, min_batch_error)
 
-# Graph the loss through time
-plt.title(f'Loss: {loss}; Learning Rate: {learn_rate:.4f}; Batch Size: {batch_size}')
-plt.plot(history, color='red')
-plt.plot([0, len(history)], [0, 0])
-plt.yscale('log')
-plt.show()
+# # Graph the loss through time
+# plt.title(f'Loss: {loss}; Learning Rate: {learn_rate:.4f}; Batch Size: {batch_size}')
+# plt.plot(history, color='red')
+# plt.plot([0, len(history)], [0, 0])
+# plt.yscale('log')
+# plt.show()
 
 
