@@ -1,15 +1,10 @@
-#!/usr/bin/env python
-# coding: utf-8
 
-# In[1]:
 
 
 import matplotlib.pyplot as plt
 import numpy as np
 import time
 
-
-# In[2]:
 
 
 class Activation:
@@ -204,8 +199,6 @@ class Activation:
 
             return self.tanh_derivative()
 
-
-# In[3]:
 
 
 class Losses:
@@ -407,8 +400,6 @@ class Losses:
             return self.cross_entropy_grad(y_true, y_pred)
 
 
-# In[4]:
-
 
 class Dense:
     """
@@ -508,18 +499,6 @@ class Dense:
 
         return self.output
 
-
-# In[5]:
-
-
-# # Testing
-# np.random.seed(2020)
-# layer = Dense(4, activation='sigmoid')
-# layer.build(feature.shape[1])
-# layer.call(feature[1])
-
-
-# In[6]:
 
 
 class Multilayers:
@@ -671,31 +650,6 @@ class Multilayers:
             i += 1
 
 
-# In[7]:
-
-
-# # Testing
-# np.random.seed(2020)
-
-# model = Multilayers(feature.shape[1],[
-#     Dense(5, activation='sigmoid'),
-#     Dense(3, activation='sigmoid'),
-#     Dense(2, activation='sigmoid')
-# ])
-
-# loss_function = Losses('SSE')
-
-# print('Before back prop:', model.predict(feature[0]))
-# model.back_prop(target[0], learn_rate=0.1, loss=loss_function)
-# print('After 1 back prop:', model.predict(feature[0]))
-# model.back_prop(target[0], learn_rate=0.1, loss=loss_function)
-# print('After 2 back prop:', model.predict(feature[0]))
-# model.back_prop(target[0], learn_rate=0.1, loss=loss_function)
-# print('After 3 back prop:', model.predict(feature[0]))
-
-
-# In[8]:
-
 
 def train(model, feature, target, loss='SSE', learn_rate=0.1, batch_size=10, momentum=0):
     """
@@ -774,8 +728,6 @@ def train(model, feature, target, loss='SSE', learn_rate=0.1, batch_size=10, mom
     return history
 
 
-# In[9]:
-
 
 def one_hot_encoding(label_vector):
     """
@@ -808,8 +760,6 @@ def one_hot_encoding(label_vector):
     
     return binary_rep
 
-
-# In[10]:
 
 
 file_num = 3
@@ -846,15 +796,11 @@ print(feature.shape)
 print(target.shape)
 
 
-# In[11]:
-
 
 # Parameters for python outputs
 periodic_output = 2E2
 plt.rcParams['figure.figsize'] = (16,6)
 
-
-# In[12]:
 
 
 # Construct the neural network
@@ -897,29 +843,4 @@ plt.plot([0, len(history)], [0, 0])
 plt.yscale('log')
 plt.show()
 
-
-# In[13]:
-
-
-# # Testing
-# def lookinside(model):
-#     print('------Weights------')
-#     print()
-#     for layer in model.model:
-#         print(layer.weight)
-#         print()
-
-#     print()
-#     print('------Outputs------')
-#     print()
-#     for layer in model.model:
-#         print(layer.output)
-#         print()
-
-# transform = Activation(activation)
-# transform.scale_y = 3
-# transform.scale_x = 1
-# x = np.arange(-3,3,0.001)
-# y = transform.call(x)
-# plt.plot(x,y)
 
